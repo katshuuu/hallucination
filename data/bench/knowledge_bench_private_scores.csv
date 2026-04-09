@@ -1,0 +1,3 @@
+prompt,response,hallucination_prob
+What is 2+2?,4,0.04132457937269792
+Who wrote Hamlet?,William Shakespeare,0.45013609646340896

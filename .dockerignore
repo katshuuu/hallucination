@@ -1,0 +1,14 @@
+.git
+.gitignore
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.mypy_cache
+.ruff_cache
+notebooks
+*.ipynb_checkpoints
+data/processed/*.csv
+!data/processed/.gitkeep
+knowledge_bench_public.csv
+*.joblib

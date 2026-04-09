@@ -1,0 +1,55 @@
+# ------------------------------
+# Python / environments
+# ------------------------------
+.venv/
+venv/
+.env
+.env.*
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.python-version
+
+# ------------------------------
+# Tooling caches
+# ------------------------------
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.coverage
+htmlcov/
+
+# ------------------------------
+# OS / editor junk
+# ------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# ------------------------------
+# Build / runtime artifacts
+# ------------------------------
+dist/
+build/
+*.log
+logs/
+
+# ------------------------------
+# Model artifacts (keep model docs/placeholders)
+# ------------------------------
+model/checkpoints/
+model/cross_encoder/
+model/tabular/
+!model/.gitkeep
+!model/README.md
+
+# ------------------------------
+# Temporary outputs
+# ------------------------------
+tmp/
+*.tmp

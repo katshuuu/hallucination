@@ -1,0 +1,15 @@
+# Запуск API после обучения: ./scripts/train.sh затем docker compose up --build
+services:
+  hallucination-api:
+    build: .
+    image: hallucination-detector:local
+    ports:
+      - "8000:8000"
+    environment:
+      HALLUCINATION_CONFIG: /app/configs/default.yaml
+      # Пример: разрешить фронтенд на другом origin (через запятую)
+      # HALLUCINATION_CORS_ORIGINS: "https://app.example.com"
+    volumes:
+      # Артефакты обучения с хоста (обязательно для инференса)
+      - ./model/tabular:/app/model/tabular:ro
+    restart: unless-stopped

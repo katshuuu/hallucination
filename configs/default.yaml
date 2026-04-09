@@ -1,0 +1,68 @@
+# Основной стек: табличные признаки + LightGBM (воспроизводимо, без LLM API на инференсе)
+
+backend: tabular
+
+tabular:
+  embedding_model: "all-MiniLM-L6-v2"
+  tfidf_max_features: 1500
+  use_lm_features: false   # true: distilgpt2 NLL/PPL по response (медленнее)
+  lm_model_name: "distilgpt2"
+  # Если в train CSV есть числовые колонки judge_*, они подмешиваются (слой 4). Иначе — нули.
+  judge_columns:
+    - judge_relevance
+    - judge_factuality
+    - judge_consistency
+    - judge_completeness
+  lgbm:
+    n_estimators: 400
+    learning_rate: 0.05
+    num_leaves: 64
+    max_depth: -1
+    subsample: 0.85
+    colsample_bytree: 0.85
+    reg_alpha: 0.0
+    reg_lambda: 1.0
+    class_weight: balanced
+
+model:
+  name: "model/tabular"
+  max_length: 256
+  num_labels: 1
+  positive_class_index: 1
+
+training:
+  base_model: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+  epochs: 3
+  learning_rate: 2.0e-5
+  warmup_ratio: 0.1
+  train_split: 0.9
+  eval_size: 0.2
+  min_pr_auc: 0.8
+  allow_public_overlap: false
+  seed: 42
+
+inference:
+  device: null
+  batch_size: 64
+  amp: true
+
+paths:
+  train_csv: "data/processed/train_merged.csv"
+  artifact_dir: "model/tabular"
+  private_input: "data/bench/knowledge_bench_private.csv"
+  private_output: "data/bench/knowledge_bench_private_scores.csv"
+
+columns:
+  prompt: "prompt"
+  response: "response"
+  label: "label"
+
+# Замер времени детекции (см. docs/COMPETITION_RULES.md, src/hallucination_detector/detection_timing.py)
+timing:
+  jury_max_billable_ms: 500
+  reference_hardware: "1x NVIDIA A100 80GB"
+  gigachat_jury_model_id: "ai-sage/GigaChat3-10B-A1.8B-bf16"
+  # Если пайплайн делает один forward этой модели для скрытых состояний — укажите измеренное время (мс), вычитаемое из billable.
+  gigachat_forward_excluded_ms: 0
+  # true = метод с градиентами: backward учитывается полностью, forward GigaChat не вычитается из billable.
+  uses_gradient_analysis: false

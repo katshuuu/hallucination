@@ -1,0 +1,16 @@
+# Сборка обучающего CSV из нескольких источников (тексты сохраняются в явном виде).
+# Запуск: ./scripts/build_train_data.sh  (нужен доступ к Hugging Face Hub для загрузки датасетов)
+
+seed: 42
+output_csv: "data/processed/train_merged.csv"
+
+# Ограничения на размер подвыборок (после препроцессинга)
+limits:
+  truthful_qa: 12000
+  snli: 8000
+  paws: 6000
+  synthetic: 2500
+  manual: null  # null = все строки из data/validation/manual_labeled_sample.csv
+
+# Если true — не загружать HF, только синтетика + manual (для отладки без сети)
+offline_only: false
